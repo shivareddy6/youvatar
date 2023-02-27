@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, NestCamWiredStandTwoTone } from "@mui/icons-material";
 import { Card, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import CustButton from "../custButton";
@@ -30,26 +30,52 @@ const NewModule = ({
       lecture_name: newLecture,
       module_id: "1",
     };
-    var data = qs.stringify(newCreatedLecture);
-    var config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "https://api.youvatar.in/courses/create_course/lecture",
-      headers: {},
-      data: data,
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const url = "https://api.youvatar.in/courses/create_course/lecture/";
+    const sessionToken = "60d0e366-bae3-47e1-b093-abc5fe3bc360";
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify(newCreatedLecture),
     };
 
-    axios(config)
-      .then(function (response) {
-        console.log(response.data);
-        alert(response.data.msg);
+    fetch(proxyUrl + url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.msg);
         setOpenNewLecture(false);
         setLectures((prev) => [...prev, newCreatedLecture]);
-        console.log(lectures);
+        console.log(data);
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch((error) => console.error(error));
+    // var data = qs.stringify(newCreatedLecture);
+    // var config = {
+    //   method: "post",
+    //   maxBodyLength: Infinity,
+    //   url: "https://api.youvatar.in/courses/create_course/lecture",
+    //   headers: {
+    //     "content-type": "application/json;charset=UTF-8",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "postman-token": "35a5235e-655d-2496-27a8-a83be2ff370f",
+    //     "cache-control": "no-cache",
+    //   },
+    //   data: data,
+    // };
+
+    // axios(config)
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //     alert(response.data.msg);
+    //     setOpenNewLecture(false);
+    //     setLectures((prev) => [...prev, newCreatedLecture]);
+    //     console.log(lectures);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
   const deleteLecture = (lecture_number) => {
     console.log(lecture_number);

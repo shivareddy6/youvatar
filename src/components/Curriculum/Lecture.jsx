@@ -52,26 +52,55 @@ const Lecture = ({
   const handleResourceSubmit = (event) => {
     event.preventDefault();
     if (disableSubmit) return;
-    var data = qs.stringify({
+    const data = {
       resource_file: resourceLink,
       lecture_id: lecture_number,
-    });
-    var config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "https://api.youvatar.in/courses/create_course/lecture/resource",
-      headers: {},
-      data: data,
+    };
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const url =
+      "https://api.youvatar.in/courses/create_course/lecture/resource/";
+    const sessionToken = "60d0e366-bae3-47e1-b093-abc5fe3bc360";
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify(data),
     };
 
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        alert(response.data.msg);
+    fetch(proxyUrl + url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.msg);
+        console.log(data);
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch((error) => console.error(error));
+    // var data = qs.stringify({
+    //   resource_file: resourceLink,
+    //   lecture_id: lecture_number,
+    // });
+    // var config = {
+    //   method: "post",
+    //   maxBodyLength: Infinity,
+    //   url: "https://api.youvatar.in/courses/create_course/lecture/resource",
+    //   headers: {
+    //     "content-type": "application/json;charset=UTF-8",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "postman-token": "35a5235e-655d-2496-27a8-a83be2ff370f",
+    //     "cache-control": "no-cache",
+    //   },
+    //   data: data,
+    // };
+
+    // axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //     alert(response.data.msg);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
     console.log(resourceLink);
     setAddResource(false);
   };

@@ -37,26 +37,53 @@ const Curriculum = ({ size = "large", modules, setModules }) => {
       module_name: newModuleName,
       course_id: "4",
     };
-    var data = qs.stringify(newModule);
-    var config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "https://api.youvatar.in/courses/create_course/module",
-      headers: {},
-      data: data,
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const url = "https://api.youvatar.in/courses/create_course/module/";
+    const sessionToken = "60d0e366-bae3-47e1-b093-abc5fe3bc360";
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify(newModule),
     };
 
-    axios(config)
-      .then(function (response) {
-        // console.log(response.data);
-        alert(response.data.msg);
+    fetch(proxyUrl + url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.msg);
         setModules((prev) => [...prev, newModule]);
         setOpenAddModule(false);
         setNewModuleName("");
+        console.log(data);
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch((error) => console.error(error));
+    // var data = qs.stringify(newModule);
+    // var config = {
+    //   method: "post",
+    //   maxBodyLength: Infinity,
+    //   url: "https://api.youvatar.in/courses/create_course/module",
+    //   headers: {
+    //     "content-type": "application/json;charset=UTF-8",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "postman-token": "35a5235e-655d-2496-27a8-a83be2ff370f",
+    //     "cache-control": "no-cache",
+    //   },
+    //   data: data,
+    // };
+
+    // axios(config)
+    //   .then(function (response) {
+    //     // console.log(response.data);
+    //     alert(response.data.msg);
+    //     setModules((prev) => [...prev, newModule]);
+    //     setOpenAddModule(false);
+    //     setNewModuleName("");
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
   // useEffect(() => console.log(modules), [modules]);
   return (

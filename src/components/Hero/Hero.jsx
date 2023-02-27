@@ -112,8 +112,8 @@ function Hero() {
   };
 
   const handleProceedClick = () => {
-    // setIsLandingPage(false);
     // return;
+    // setIsLandingPage(false);
     if (isLandingPage === false) return;
     for (var i = 0; i < fields.length - 2; i++) {
       if (formData[fields[i]].length === 0) {
@@ -121,28 +121,53 @@ function Hero() {
         return;
       }
     }
-    // console.log(tempData);
-    // console.log(formData);
-    var data = qs.stringify(formData);
-    // console.log(data);
-    var config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "https://api.youvatar.in/courses/create_course/landing_page",
-      headers: {},
-      data: data,
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const url = "https://api.youvatar.in/courses/create_course/landing_page/";
+    const sessionToken = "60d0e366-bae3-47e1-b093-abc5fe3bc360";
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify(formData),
     };
-    // console.log(data);
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        alert(response.data.msg);
+
+    fetch(proxyUrl + url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.msg);
         setIsLandingPage(false);
         setFormData(initialData);
+        console.log(data);
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch((error) => console.error(error));
+
+    // console.log(tempData);
+    // console.log(formData);
+    // var data = qs.stringify(formData);
+    // console.log(data);
+    // var config = {
+    //   method: "post",
+    //   maxBodyLength: Infinity,
+    //   url: "https://api.youvatar.in/courses/create_course/landing_page",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Authorization": `Bearer 60d0e366-bae3-47e1-b093-abc5fe3bc360`,
+    //   },
+    //   data: data,
+    // };
+    // // console.log(data);
+    // axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //     alert(response.data.msg);
+    //     // setIsLandingPage(false);
+    //     // setFormData(initialData);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
 
   // useEffect(() => {
