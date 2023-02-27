@@ -165,7 +165,7 @@ const LandingPageForm = ({ formData, handleFormChange, size = "large" }) => {
                 </p>
               ) : (
                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  {"Uploaded " + file1}
+                  {"Uploaded " + file2}
                 </p>
               )}
             </div>
